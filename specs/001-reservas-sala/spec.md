@@ -21,23 +21,37 @@ para tener dónde trabajar con mi grupo.
    reserva queda registrada a mi nombre.
 2. **Dado** que elijo como inicio las 10:00 y como fin las 09:00, **Cuando** intento reservar,
    **Entonces** la reserva se rechaza con el mensaje "La hora de fin debe ser posterior a la de inicio".
-
-### Edge Cases
-
-- ¿Qué pasa si la sala ya está ocupada en ese horario?
+3. **Dado** que la sala A tiene una reserva de 09:00 a 10:00, **Cuando** intento reservar la
+   misma sala de 09:30 a 10:30, **Entonces** la nueva solicitud se rechaza con el mensaje
+   "La sala ya está reservada en ese horario" y no se registra.
+4. **Dado** que la sala A tiene una reserva de 09:00 a 11:00, **Cuando** intento reservar la
+   misma sala de 09:30 a 10:00, **Entonces** la nueva solicitud se rechaza con el mensaje
+   "La sala ya está reservada en ese horario" y no se registra.
+5. **Dado** que la sala A tiene una reserva de 09:30 a 10:00, **Cuando** intento reservar la
+   misma sala de 09:00 a 11:00, **Entonces** la nueva solicitud se rechaza con el mensaje
+   "La sala ya está reservada en ese horario" y no se registra.
+6. **Dado** que la sala A tiene una reserva de 09:00 a 10:00, **Cuando** intento reservar la
+   misma sala de 10:00 a 11:00, **Entonces** la nueva solicitud se rechaza con el mensaje
+   "La sala ya está reservada en ese horario" y no se registra.
+7. **Dado** que la sala A tiene una reserva de 10:00 a 11:00, **Cuando** intento reservar la
+   misma sala de 09:00 a 10:00, **Entonces** la nueva solicitud se rechaza con el mensaje
+   "La sala ya está reservada en ese horario" y no se registra.
+8. **Dado** que la sala A tiene una reserva de 09:00 a 10:00, **Cuando** intento reservar la
+   sala B de 09:00 a 10:00, **Entonces** la nueva reserva queda registrada a mi nombre.
 
 ## Requirements
 
 ### Functional Requirements
 
 - **FR-001**: El estudiante elige una sala, una hora de inicio y una hora de fin.
-- **FR-002**: La pantalla `ReservaPage` usa un `DropdownButton` para las salas y `showTimePicker`
-  para las horas.
-- **FR-003**: El estado del formulario se maneja con `setState` dentro de
-  `lib/presentation/reserva_page.dart`.
-- **FR-004**: La reserva se guarda en la tabla `reservas` de Supabase usando el paquete
-  `supabase_flutter`.
+- **FR-002**: Una reserva aceptada queda registrada a nombre del estudiante para la sala y el
+  intervalo elegidos.
+- **FR-003**: Dos reservas de la misma sala no pueden solaparse. Se considera solapamiento
+  compartir cualquier instante del intervalo, incluidos sus extremos.
+- **FR-004**: Si una reserva existente de la misma sala se solapa con la solicitud, esta se
+  rechaza con el mensaje exacto "La sala ya está reservada en ese horario" y no se registra.
 - **FR-005**: La hora de fin debe ser posterior a la hora de inicio.
+- **FR-006**: Una reserva de otra sala no genera conflicto, aunque tenga el mismo intervalo.
 
 ### Key Entities
 
